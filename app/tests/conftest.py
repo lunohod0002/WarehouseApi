@@ -1,15 +1,10 @@
 import asyncio
 
 import pytest
-from app.backend.db import Base,async_session_maker,engine
+from app.database import engine
 from app.config import settings
-from app.backend.db import Base
-from sqlalchemy import select,insert,update,delete
+from app.database import Base
 from main import app as fastapi_app
-from app.Product import Products
-from app.Order import Orders,OrderItems
-import json
-from fastapi.testclient import TestClient
 from httpx import AsyncClient
 @pytest.fixture(scope="session",autouse=True)
 async def prepare_database():

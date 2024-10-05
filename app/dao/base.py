@@ -1,4 +1,4 @@
-from app.backend.db import async_session_maker, get_db
+from app.database import async_session_maker
 from sqlalchemy import select, insert
 
 
