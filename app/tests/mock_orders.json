@@ -1,0 +1,16 @@
+[{
+        "id":1,
+        "creation_date":"2024-10-05 16:31:16.563012",
+        "status":"IN_PROGRESS"
+},
+  {
+        "id":2,
+        "creation_date":"2024-10-05 16:31:16.563012",
+        "status":"DELIVIERED"
+},
+{
+        "id":3,
+        "creation_date":"2024-10-05 16:31:16.563012",
+        "status":"CANCELED"
+}
+]
