@@ -1,0 +1,22 @@
+[{
+        "id":1,
+        "name":"Хлеб",
+        "description":"Очень вкусный хлеб",
+        "price": 50,
+        "number": 100
+},
+  {
+        "id":2,
+        "name":"Молоко",
+        "description":"Лучшее молоко!",
+        "price": 80,
+        "number": 90
+},
+    {
+        "id":3,
+        "name":"Яблоки",
+        "description":"Лучшие яблоки!",
+        "price": 110,
+        "number": 70
+}
+]
