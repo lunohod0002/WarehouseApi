@@ -1,12 +1,12 @@
 from typing import List
 from fastapi import status, HTTPException
 from fastapi import APIRouter
-from app.order.dao import OrdersDao, OrderItemsDao
-from app.product.dao import ProductsDao
-from app.order.service import OrderService
-router = APIRouter(prefix="/order",
+from app.orders.dao import OrdersDao, OrderItemsDao
+from app.products.dao import ProductsDao
+from app.orders.service import OrderService
+router = APIRouter(prefix="/orders",
                    tags=['Orders'])
-from app.order.schemas import SOrder, CreateOrderItem,CreateOrder
+from app.orders.schemas import SOrder, CreateOrderItem,CreateOrder
 
 
 @router.get("")

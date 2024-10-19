@@ -3,7 +3,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Integer, String
 
 class Products(Base):
-    __tablename__ = "product"
+    __tablename__ = "products"
     id = Column(Integer, nullable=False, primary_key=True, index=True)
     name = Column(String,nullable=False)
     description = Column(String,nullable=False)

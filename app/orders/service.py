@@ -3,10 +3,10 @@ from typing import List
 from fastapi import HTTPException
 from starlette import status
 
-from app.order.dao import OrdersDao, OrderItemsDao
-from app.order.schemas import CreateOrder
-from app.order.schemas import SOrder
-from app.product.dao import ProductsDao
+from app.orders.dao import OrdersDao, OrderItemsDao,IdempotencyKeyDao
+from app.orders.schemas import CreateOrder
+from app.orders.schemas import SOrder
+from app.products.dao import ProductsDao
 
 
 class OrderService():
@@ -30,7 +30,9 @@ class OrderService():
                     detail=f'There is no products amount of {product["name"]}'
                 )
             try:
-                order_id = await OrdersDao.add(status="IN_PROGRESS", idempotency_key=idempotency_key)
+                await IdempotencyKeyDao.add(idempotency_key=idempotency_key)
+
+                order_id = await OrdersDao.add(status="IN_PROGRESS")
                 for orderItem in orderItems.orderItems:
                     await ProductsDao.update_number(id=orderItem.product_id,
                                                     number=products[orderItem.product_id] - int(

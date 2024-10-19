@@ -3,8 +3,8 @@ from typing import List
 from fastapi import HTTPException
 from starlette import status
 
-from app.product.schemas import SProduct
-from app.product.dao import ProductsDao
+from app.products.schemas import SProduct
+from app.products.dao import ProductsDao
 
 
 class ProductService():
@@ -18,13 +18,13 @@ class ProductService():
         if exist_product != None:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail='product is already exist!'
+                detail='products is already exist!'
             )
         await ProductsDao.add(id=product.id, name=product.name, price=product.price, number=product.number,
                               description=product.description)
         return {
             'status_code': status.HTTP_201_CREATED,
-            'transaction': 'product was created!'
+            'transaction': 'products was created!'
         }
 
     @classmethod
@@ -37,12 +37,12 @@ class ProductService():
         if product is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail='There is no product found!'
+                detail='There is no products found!'
             )
         await ProductsDao.update_product(id, update_product=updateProduct)
         return {
             'status_code': status.HTTP_200_OK,
-            'transaction': 'product update is successful'
+            'transaction': 'products update is successful'
         }
 
     @classmethod
@@ -51,10 +51,10 @@ class ProductService():
         if product is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail='There is no product found!'
+                detail='There is no products found!'
             )
         await ProductsDao.delete_product(id=id)
         return {
             'status_code': status.HTTP_200_OK,
-            'transaction': 'product id deleted  successful!'
+            'transaction': 'products id deleted  successful!'
         }

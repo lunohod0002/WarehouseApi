@@ -1,11 +1,11 @@
 from fastapi import status, HTTPException
 from fastapi import APIRouter
-from app.product.dao import ProductsDao
-from app.product.service import ProductService
+from app.products.dao import ProductsDao
+from app.products.service import ProductService
 
-router = APIRouter(prefix="/product",
+router = APIRouter(prefix="/products",
                    tags=['Products'])
-from app.product.schemas import SProduct
+from app.products.schemas import SProduct
 
 
 @router.get("")
