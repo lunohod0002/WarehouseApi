@@ -1,10 +1,9 @@
 from sqlalchemy.orm import selectinload
 
 from app.dao.base import BaseDAO
-from app.Order import Orders, OrderItems
+from app.order import Orders, OrderItems
 from sqlalchemy import select, update
 from app.database import async_session_maker
-
 
 class OrdersDao(BaseDAO):
     model = Orders

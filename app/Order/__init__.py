@@ -18,17 +18,20 @@ OrderStatusType: Enum = Enum(
     validate_strings=True,
 )'''
 class Orders(Base):
-    __tablename__ = "orders"
+    __tablename__ = "order"
     id = Column(Integer, nullable=False, primary_key=True, index=True)
     creation_date = Column(DateTime,default=func.now())
     status = Column(String,nullable=False)
+    idempotency_key=Column(String,unique=True)
     items = relationship(lambda: OrderItems, foreign_keys=lambda: OrderItems.order_id,backref='order_items')
 class OrderItems(Base):
     __tablename__ = "order_items"
     id = Column(Integer, nullable=False, primary_key=True, index=True)
-    order_id = Column(Integer, ForeignKey('orders.id'), nullable=False)
-    product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
+    order_id = Column(Integer, ForeignKey('order.id'), nullable=False)
+    product_id = Column(Integer, ForeignKey('product.id'), nullable=False)
     products_number=Column(Integer,nullable=False)
+
+
 
 '''async def create_tables() -> None:
     async with engine.begin() as conn:

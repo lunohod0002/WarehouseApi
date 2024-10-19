@@ -21,4 +21,6 @@ class CreateOrderItem(BaseModel):
     product_id: int
     products_number: int
 
-    model_config = ConfigDict(from_attributes=True)
+class CreateOrder(BaseModel):
+    idempotency_key : str
+    orderItems: List[CreateOrderItem]

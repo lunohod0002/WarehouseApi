@@ -1,52 +1,31 @@
 from typing import List
 from fastapi import status, HTTPException
 from fastapi import APIRouter
-from app.Order.dao import OrdersDao, OrderItemsDao
-from app.Product.dao import ProductsDao
-
-router = APIRouter(prefix="/orders",
+from app.order.dao import OrdersDao, OrderItemsDao
+from app.product.dao import ProductsDao
+from app.order.service import OrderService
+router = APIRouter(prefix="/order",
                    tags=['Orders'])
-from app.Order.schemas import SOrder, CreateOrderItem
+from app.order.schemas import SOrder, CreateOrderItem,CreateOrder
 
 
 @router.get("")
-async def getAll():
-    return await OrdersDao.get_all()
+async def get_all():
+    return await OrderService.get_all()
 
 
 @router.post("/create")
-async def createOrder(orderItems: list[CreateOrderItem]):
-    products = {}
+async def create_order(orderItems: CreateOrder):
+    await OrderService.create_order(orderItems)
 
-    for orderItem in orderItems:
-        print(await ProductsDao.get_by_id(id=orderItem.product_id))
-        product = await ProductsDao.get_by_id(id=orderItem.product_id)
-        products[product["id"]] = int(product["number"])
-
-        if (product.number < orderItem.products_number):
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f'There is no products amount of {product["name"]}'
-            )
-    order_id = await OrdersDao.add(status="IN_PROGRESS")
-    for orderItem in orderItems:
-        await ProductsDao.update_number(id=orderItem.product_id,
-                                        number=products[orderItem.product_id] - int(orderItem.products_number))
-        await OrderItemsDao.add(id=orderItem.id, order_id=order_id, product_id=orderItem.product_id,
-                                products_number=orderItem.products_number)
-
-    return {
-        'status_code': status.HTTP_201_CREATED,
-        'transaction': f'Order {order_id} was created!'
-    }
 
 
 @router.get("/{id}")
-async def getOrder(id: int):
-    order = await OrdersDao.get_by_id(id)
+async def get_order(id: int):
+    order = await OrderService.get_order(id)
     return order
 
 
 @router.patch("/{id}/{status}")
-async def updateStatus(id: int, status: str):
-    return await OrdersDao.update_status(id, status)
+async def update_status(id: int, status: str):
+    return await OrderService.update_status(id, status)

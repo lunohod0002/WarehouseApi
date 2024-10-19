@@ -1,5 +1,7 @@
 import asyncio
 from logging.config import fileConfig
+import app.order
+import app.product
 from app.database import Base
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection

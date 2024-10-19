@@ -1,8 +1,8 @@
 from app.dao.base import BaseDAO
-from app.Product import Products
+from app.product import Products
 from sqlalchemy import update,delete
 from app.database import async_session_maker
-from app.Product.schemas import SProduct
+from app.product.schemas import SProduct
 class ProductsDao(BaseDAO):
     model = Products
     @classmethod
