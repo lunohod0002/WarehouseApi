@@ -3,11 +3,12 @@ from typing import List
 from fastapi import HTTPException
 from starlette import status
 
-from app.orders.dao import OrdersDao, OrderItemsDao,IdempotencyKeyDao
+from app.orders.dao import OrdersDao, OrderItemsDao, IdempotencyKeyDao
 from app.orders.schemas import CreateOrder
 from app.orders.schemas import SOrder
 from app.products.dao import ProductsDao
-
+from app.outbox.dao import OutBoxDao
+import json
 
 class OrderService():
     @classmethod
@@ -15,7 +16,7 @@ class OrderService():
         return await OrdersDao.get_all()
 
     @classmethod
-    async def create_order(cls,orderItems: CreateOrder):
+    async def create_order(cls, orderItems: CreateOrder):
         products = {}
         idempotency_key = orderItems.idempotency_key
         for orderItem in orderItems.orderItems:
@@ -31,8 +32,9 @@ class OrderService():
                 )
             try:
                 await IdempotencyKeyDao.add(idempotency_key=idempotency_key)
-
                 order_id = await OrdersDao.add(status="IN_PROGRESS")
+                data={"order_id":order_id,"order_items":orderItems.orderItems}
+                await OutBoxDao.add(payload=json.dumps(data),status="CREATED")
                 for orderItem in orderItems.orderItems:
                     await ProductsDao.update_number(id=orderItem.product_id,
                                                     number=products[orderItem.product_id] - int(
@@ -51,10 +53,10 @@ class OrderService():
                 }
 
     @classmethod
-    async def get_order(cls,id: int):
+    async def get_order(cls, id: int):
         order = await OrdersDao.get_by_id(id)
         return order
-    @classmethod
-    async def update_status(cls,id: int, status: str):
-        return await OrdersDao.update_status(id, status)
 
+    @classmethod
+    async def update_status(cls, id: int, status: str):
+        return await OrdersDao.update_status(id, status)

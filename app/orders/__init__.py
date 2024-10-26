@@ -22,6 +22,7 @@ class Orders(Base):
     id = Column(Integer, nullable=False, primary_key=True, index=True)
     creation_date = Column(DateTime,default=func.now())
     status = Column(String,nullable=False)
+    idempotency_key=Column(String,unique=True)
     items = relationship(lambda: OrderItems, foreign_keys=lambda: OrderItems.order_id,backref='order_items')
 class OrderItems(Base):
     __tablename__ = "order_items"
@@ -29,12 +30,14 @@ class OrderItems(Base):
     order_id = Column(Integer, ForeignKey('orders.id'), nullable=False)
     product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
     products_number=Column(Integer,nullable=False)
-
 class IdempotencyKey(Base):
     __tablename__ = "idempotency_key"
     id = Column(Integer, nullable=False, primary_key=True, index=True)
-    creation_date = Column(DateTime,default=func.now())
     idempotency_key=Column(String,unique=True)
+
+
+
+
 
 
 '''async def create_tables() -> None:

@@ -2,6 +2,7 @@ import asyncio
 from logging.config import fileConfig
 import app.orders
 import app.products
+import app.outbox
 from app.database import Base
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection

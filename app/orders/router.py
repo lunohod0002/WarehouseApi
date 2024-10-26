@@ -8,7 +8,6 @@ router = APIRouter(prefix="/orders",
                    tags=['Orders'])
 from app.orders.schemas import SOrder, CreateOrderItem,CreateOrder
 
-
 @router.get("")
 async def get_all():
     return await OrderService.get_all()

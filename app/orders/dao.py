@@ -20,13 +20,16 @@ class OrdersDao(BaseDAO):
     @classmethod
     async def get_by_id(cls, id: int):
         async with async_session_maker() as session:
-            result = await session.execute(select(cls.model.__table__.columns).filter_by(id=id).options(selectinload(Orders.items)))
+            result = await session.execute(
+                select(cls.model.__table__.columns).filter_by(id=id).options(selectinload(Orders.items)))
             return result.mappings().all()
+
     @classmethod
     async def get_all(cls):
         async with async_session_maker() as session:
             result = await session.execute(select(cls.model.__table__.columns).options(selectinload(Orders.items)))
             return result.mappings().all()
+
 
 class OrderItemsDao(BaseDAO):
     model = OrderItems

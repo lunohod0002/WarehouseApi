@@ -4,7 +4,7 @@ import pytest
 from app.database import engine
 from app.config import settings
 from app.database import Base
-from main import app as fastapi_app
+from app.main import app as fastapi_app
 from httpx import AsyncClient
 @pytest.fixture(scope="session",autouse=True)
 async def prepare_database():

@@ -9,23 +9,23 @@ from app.products.schemas import SProduct
 
 
 @router.get("")
-async def getAll() -> list[SProduct]:
-    return await ProductService.getAll()
+async def get_all() -> list[SProduct]:
+    return await ProductService.get_all()
 
 
 @router.post("")
 async def create_product(product: SProduct):
-    await ProductService.createProduct(product)
+    await ProductService.create_product(product)
 
 
 @router.get("/{id}")
 async def get_product(id: int):
-    return await ProductService.getProduct(id)
+    return await ProductService.get_product(id)
 
 
 @router.put("/{id}")
 async def update_product(id: int, updateProduct: SProduct):
-    await ProductService.updateProduct(id, updateProduct=updateProduct)
+    await ProductService.update_product(id, updateProduct=updateProduct)
 
 
 @router.delete("/{id}")
