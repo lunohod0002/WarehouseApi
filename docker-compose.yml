@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:15
+    container_name: order_db
+    env_file:
+      - .env-nov-dev
+    ports:
+      - 5433:5433
+    command : ["-p", "5433"]
+  order:
+    image: order_image
+    build:
+      context: .
+    container_name: order_app
+    env_file:
+      - .env-nov-dev
+    depends_on:
+      - db
+    command: ["/order/docker/app.sh"]
+    ports:
+      - 7777:8000
+
