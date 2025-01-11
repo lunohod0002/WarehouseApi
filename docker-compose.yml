@@ -4,7 +4,7 @@ services:
     image: postgres:15
     container_name: order_db
     env_file:
-      - .env-nov-dev
+      - .env-not-dev
     ports:
       - 5433:5433
     command : ["-p", "5433"]
@@ -14,7 +14,7 @@ services:
       context: .
     container_name: order_app
     env_file:
-      - .env-nov-dev
+      - .env-not-dev
     depends_on:
       - db
     command: ["/order/docker/app.sh"]
