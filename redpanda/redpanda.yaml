@@ -1,0 +1,6 @@
+admin:
+  users:
+    - username: redpanda_admin
+      password: password
+      roles:
+        - admin

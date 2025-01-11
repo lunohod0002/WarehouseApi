@@ -1,11 +1,14 @@
 from sqlalchemy.orm import selectinload
 
 from app.dao.base import BaseDAO
-from app.orders import Orders, OrderItems,IdempotencyKey
+from app.orders import Orders, OrderItems, IdempotencyKey
 from sqlalchemy import select, update
 from app.database import async_session_maker
+
+
 class IdempotencyKeyDao(BaseDAO):
     model = IdempotencyKey
+
 
 class OrdersDao(BaseDAO):
     model = Orders

@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 from fastapi import HTTPException
@@ -9,6 +10,7 @@ from app.orders.schemas import SOrder
 from app.products.dao import ProductsDao
 from app.outbox.dao import OutBoxDao
 import json
+
 
 class OrderService():
     @classmethod
@@ -30,27 +32,35 @@ class OrderService():
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f'There is no products amount of {product["name"]}'
                 )
-            try:
-                await IdempotencyKeyDao.add(idempotency_key=idempotency_key)
-                order_id = await OrdersDao.add(status="IN_PROGRESS")
-                data={"order_id":order_id,"order_items":orderItems.orderItems}
-                await OutBoxDao.add(payload=json.dumps(data),status="CREATED")
-                for orderItem in orderItems.orderItems:
-                    await ProductsDao.update_number(id=orderItem.product_id,
-                                                    number=products[orderItem.product_id] - int(
-                                                        orderItem.products_number))
+        try:
+            await IdempotencyKeyDao.add(idempotency_key=idempotency_key)
+            order_id = await OrdersDao.add(status="IN_PROGRESS")
+
+            order_products = []
+            for orderItem in orderItems.orderItems:
+                await ProductsDao.update_number(id=orderItem.product_id,
+                                                number=products[orderItem.product_id] - int(
+                                                    orderItem.products_number))
                 await OrderItemsDao.add(id=orderItem.id, order_id=order_id, product_id=orderItem.product_id,
                                         products_number=orderItem.products_number)
-                return {
-                    'status_code': status.HTTP_201_CREATED,
-                    'transaction': f'Order {order_id} was created!'
-                }
-            except Exception as e:
-                print(e)
-                return {
-                    'status_code': status.HTTP_200_OK,
-                    'transaction': f'Order  was created!'
-                }
+                order_products.append(dict(orderItem))
+
+            data = {"order_id": order_id, "order_items": order_products, "idempotency_key": idempotency_key}
+            await OutBoxDao.add(payload=json.dumps(data), status="CREATED")
+            logging.error(await OutBoxDao.get_all())
+
+            await OutBoxDao.add(payload=json.dumps(data), status="CREATED")
+
+            return {
+                'status_code': status.HTTP_201_CREATED,
+                'transaction': f'Order {order_id} was created!'
+            }
+        except Exception as e:
+            logging.error(e)
+            return {
+                'status_code': status.HTTP_200_OK,
+                'transaction': f'Order  was created!'
+            }
 
     @classmethod
     async def get_order(cls, id: int):
