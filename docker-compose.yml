@@ -20,4 +20,3 @@ services:
     command: ["/order/docker/app.sh"]
     ports:
       - 7777:8000
-
