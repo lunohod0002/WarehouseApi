@@ -1,3 +1,4 @@
 .env
-.env-nov-dev
+.env-not-dev
+__pycache__/
 .idea/

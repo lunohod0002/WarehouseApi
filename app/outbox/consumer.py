@@ -1,14 +1,16 @@
 import json
 from kafka import KafkaConsumer
 import logging
+
+
 def get_messages():
     consumer = KafkaConsumer(
-      bootstrap_servers=["redpanda-0:9092"],
-      group_id="demo-group",
-      auto_offset_reset="latest",
-      enable_auto_commit=False,
-      consumer_timeout_ms=1000,
-      value_deserializer=lambda m: json.loads(m.decode('ascii'))
+        bootstrap_servers=["redpanda-0:9092"],
+        group_id="demo-group",
+        auto_offset_reset="latest",
+        enable_auto_commit=False,
+        consumer_timeout_ms=1000,
+        value_deserializer=lambda m: json.loads(m.decode('ascii'))
     )
 
     consumer.subscribe("orders")
